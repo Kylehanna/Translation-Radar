@@ -49,10 +49,21 @@ src/
     routes/
       alerts.py
       health.py
+      sources.py
     services/
-      disclosure_gap.py
+      scout_signal.py
+    sources/
+      base.py
+      inteum_rss.py
 tests/
   test_disclosure_gap.py
+  test_inteum_rss.py
+data/
+  rag/
+    normalized_records.json
+    feed_manifest.json
+  source_inventory/
+    technologypublisher_hosts.csv
 ```
 
 ## Run Locally
@@ -72,3 +83,32 @@ Then open `http://127.0.0.1:8000/docs`.
 2. Add a normalized persistence layer for institutions, researchers, technologies, publications, grants, patents, and alerts.
 3. Add a thesis-driven scout endpoint that ranks opportunities against structured search criteria.
 4. Add an evidence-backed opportunity brief endpoint for scout review.
+
+## Current API Surfaces
+
+- `POST /alerts/scout-signals` ranks researcher-linked scout signals
+- `POST /sources/normalize/inteum-rss` normalizes Inteum-style RSS feeds into the common technology schema
+- `GET /sources/registry/technologypublisher` returns the tracked Technology Publisher host inventory and rough active-count estimate
+- `POST /rag/search` returns ranked technology matches from the current index snapshot or fallback seed corpus
+- `POST /rag/index/build` writes the current RAG index snapshot
+- `GET /rag/index/status` reports whether the current index snapshot exists
+
+## Current RAG Build Flow
+
+The current indexing slice works in three steps:
+
+1. Harvest Inteum RSS feeds into `data/rag/normalized_records.json` with:
+
+```bash
+PYTHONPATH=src .venv/bin/python -m translation_radar_api.services.rag_harvest
+```
+
+2. Build the local index snapshot with:
+
+```bash
+PYTHONPATH=src .venv/bin/python -c "from translation_radar_api.services.rag_search import build_seed_rag_index; print(build_seed_rag_index().model_dump())"
+```
+
+3. Query the index through `POST /rag/search`.
+
+The repository also ships a small set of real public normalized fixture records in `data/rag/normalized_records.json` so the default index build produces non-seed documents immediately.

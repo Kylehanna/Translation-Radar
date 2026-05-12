@@ -1,0 +1,63 @@
+[
+  {
+    "institution_name": "University of Hawaii",
+    "source_type": "technologypublisher",
+    "source_url": "https://universityofhawaii.technologypublisher.com/",
+    "title": "Ultrasound method for transforming algae",
+    "summary": "University of Hawaii public technology-search listing for an ultrasound-based algae transformation method available for commercialization.",
+    "contact_name": null,
+    "contact_email": null,
+    "category_tags": [
+      "agriculture",
+      "biotechnology",
+      "algae"
+    ],
+    "posted_on": null,
+    "raw_metadata": {
+      "guid": "university-of-hawaii-ultrasound-method-for-transforming-algae",
+      "ipStatus": "available",
+      "source_family": "Technology Publisher",
+      "evidence_note": "Bing result snippet for University of Hawaii public technology search referenced this listing title on May 12 2026."
+    }
+  },
+  {
+    "institution_name": "University of Southern California",
+    "source_type": "technologypublisher",
+    "source_url": "https://usc.technologypublisher.com/tech?title=2024-170_-_Deterministic_Benchmarking%3a_fast_and_scalable_calibration_of_qubit_logic_gates_to_minimize_downtime",
+    "title": "Deterministic Benchmarking for Scalable Quantum Gate Calibration",
+    "summary": "USC public technology listing for deterministic benchmarking methods to reduce calibration downtime in quantum systems.",
+    "contact_name": null,
+    "contact_email": null,
+    "category_tags": [
+      "quantum",
+      "calibration",
+      "software"
+    ],
+    "posted_on": "2026-04-30",
+    "raw_metadata": {
+      "guid": "usc-2024-170-public-catalog",
+      "ipStatus": "available",
+      "source_family": "Technology Publisher"
+    }
+  },
+  {
+    "institution_name": "University of Texas at El Paso",
+    "source_type": "tradespace_market",
+    "source_url": "https://utep.tradespacemarket.com/opportunities/0df5a9006a4ecf2d57c1e3f1e",
+    "title": "Coupled Memristor Devices for Feedback Control and Sensing of Micro and Nanoelectromechanical Actuators",
+    "summary": "UTEP public TradeSpace marketplace opportunity for coupled memristor devices used in sensing and feedback control of micro and nanoelectromechanical systems.",
+    "contact_name": null,
+    "contact_email": null,
+    "category_tags": [
+      "sensors",
+      "hardware",
+      "memristor"
+    ],
+    "posted_on": null,
+    "raw_metadata": {
+      "guid": "utep-memristor-actuators-public-marketplace",
+      "ipStatus": "exclusive-license",
+      "source_family": "TradeSpace Market"
+    }
+  }
+]

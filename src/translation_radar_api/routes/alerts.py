@@ -1,12 +1,12 @@
 from fastapi import APIRouter
 
-from translation_radar_api.models import DisclosureGapRequest, DisclosureGapResponse
-from translation_radar_api.services.disclosure_gap import build_gap_alerts
+from translation_radar_api.models import ScoutSignalRequest, ScoutSignalResponse
+from translation_radar_api.services.scout_signal import build_scout_signals
 
 
 router = APIRouter(prefix="/alerts", tags=["alerts"])
 
 
-@router.post("/disclosure-gap", response_model=DisclosureGapResponse)
-def disclosure_gap_alerts(payload: DisclosureGapRequest) -> DisclosureGapResponse:
-    return build_gap_alerts(payload.researchers, minimum_score=payload.minimum_score)
+@router.post("/scout-signals", response_model=ScoutSignalResponse)
+def scout_signal_alerts(payload: ScoutSignalRequest) -> ScoutSignalResponse:
+    return build_scout_signals(payload.researchers, minimum_score=payload.minimum_score)
