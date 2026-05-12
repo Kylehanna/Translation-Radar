@@ -1,0 +1,209 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+==========================================================================
+【AI HANDOVER NOTE】
+1. DESIGN PHILOSOPHY:
+   - Mission Control Intelligence Platform: This is not a consumer SaaS dashboard. The design language draws from intelligence platforms, financial terminals, and aerospace control systems. Every element communicates precision, provenance, and operational readiness.
+   - Cinematic Seriousness: The interface uses warm ivory backgrounds paired with deep navy and graphite panels to create a sophisticated, high-trust environment. This is a tool for serious commercialization research, not casual browsing.
+   - Provenance-First Design: Every data point must trace back to its source. Visual hierarchy emphasizes institution badges, source verification status, and confidence scores. The system is built for auditability and trust.
+
+2. TYPOGRAPHY:
+   - Inter (Sans): Selected for its technical precision, excellent readability at small sizes, and tabular figure support. The slightly condensed proportions work well for dense information displays without feeling cramped. Weight range (400-700) supports clear hierarchy from body text to strong headings.
+   - IBM Plex Mono: Used for all data that requires precision: URLs, patent numbers, confidence scores, timestamps, agent IDs. Its humanist design maintains readability while signaling technical accuracy. Essential for the intelligence platform aesthetic.
+
+3. COLOR SYSTEM:
+   - Brand Foundation: Deep navy (H=240°) serves as the primary brand color, evoking trust, intelligence, and depth. This maps to --primary for key actions and --sidebar for the left rail control panel.
+   - Warm Ivory Base: Background uses a warm sand tone (H=40°, low chroma) to reduce eye strain during extended research sessions while maintaining a premium, paper-like quality. This is not stark white—it's intentionally softer.
+   - Amber Accent System: --accent uses amber (H=35°) for confidence indicators, live status, and interactive highlights. This warm tone contrasts beautifully against navy while avoiding the aggression of pure orange.
+   - Semantic Colors: --destructive uses restrained red (H=10°) for errors and alerts without alarm. --success employs muted teal (H=180°) for verified sources and completed agent runs. --warning uses deeper amber (H=30°) for attention states.
+   - Ring Color: Uses amber to maintain consistency with the accent system, ensuring focus states feel intentional and part of the intelligence aesthetic.
+
+4. USAGE GUIDE:
+   - Layout: Full-width dashboard with 3-column structure. Left rail (280px) uses --sidebar colors for agent controls. Center canvas is flexible, using --background for the conversational search area. Right panel (380px) uses --card for evidence cards with --border separators.
+   - Panel Treatment: Use --popover for floating elements like dropdowns and tooltips. Apply subtle backdrop-blur (8px) to modals and overlays to maintain context while focusing attention.
+   - Data Density: Leverage --muted and --muted-foreground for secondary metadata. Use --mono font for all numerical data, scores, and technical identifiers. Maintain 1.5-2px borders using --border for crisp separation.
+   - Status Indicators: Live agent status uses --accent (amber) for active states, --success (teal) for verified, --warning for needs-review, and --destructive for errors. Confidence scores should use a gradient from --muted to --accent.
+   - Dark Mode Strategy: Dark mode inverts the hierarchy—deep navy becomes the primary background, graphite for cards, and warm ivory for text. This creates a true mission-control night-mode experience.
+   - Grid Textures: Apply subtle dot-grid patterns (1px dots, 16px spacing, 3% opacity) to --sidebar and --card backgrounds for tactile depth without noise.
+   - Charts: Use the 5-chart palette for technology domain clustering, institution coverage maps, and confidence distribution graphs. Colors are chosen for maximum differentiation in dense visualizations.
+==========================================================================
+*/
+
+:root {
+  /* Typography */
+  --font-sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  
+  /* Radius */
+  --radius: 0.5rem;
+
+  /* Core UI Tokens */
+  --background: oklch(0.96 0.015 40);
+  --foreground: oklch(0.15 0.02 240);
+  --card: oklch(0.98 0.01 40);
+  --card-foreground: oklch(0.18 0.02 240);
+  --popover: oklch(0.99 0.008 40);
+  --popover-foreground: oklch(0.15 0.02 240);
+  --primary: oklch(0.25 0.08 240);
+  --primary-foreground: oklch(0.98 0.01 40);
+  --secondary: oklch(0.88 0.02 240);
+  --secondary-foreground: oklch(0.20 0.03 240);
+  --muted: oklch(0.92 0.012 40);
+  --muted-foreground: oklch(0.48 0.02 240);
+  --accent: oklch(0.62 0.14 35);
+  --accent-foreground: oklch(0.98 0.01 40);
+  --destructive: oklch(0.55 0.20 10);
+  --destructive-foreground: oklch(0.98 0.01 40);
+  --border: oklch(0.86 0.015 40);
+  --input: oklch(0.88 0.015 40);
+  --ring: oklch(0.62 0.14 35);
+  
+  /* Chart Tokens */
+  --chart-1: oklch(0.55 0.18 180);
+  --chart-2: oklch(0.62 0.14 35);
+  --chart-3: oklch(0.48 0.16 280);
+  --chart-4: oklch(0.58 0.12 140);
+  --chart-5: oklch(0.52 0.18 320);
+  
+  /* Sidebar Tokens */
+  --sidebar: oklch(0.25 0.08 240);
+  --sidebar-foreground: oklch(0.92 0.01 240);
+  --sidebar-primary: oklch(0.62 0.14 35);
+  --sidebar-primary-foreground: oklch(0.98 0.01 40);
+  --sidebar-accent: oklch(0.32 0.09 240);
+  --sidebar-accent-foreground: oklch(0.92 0.01 240);
+  --sidebar-border: oklch(0.32 0.06 240);
+  --sidebar-ring: oklch(0.62 0.14 35);
+}
+
+.dark {
+  --background: oklch(0.12 0.03 240);
+  --foreground: oklch(0.92 0.01 240);
+  --card: oklch(0.16 0.03 240);
+  --card-foreground: oklch(0.90 0.01 240);
+  --popover: oklch(0.14 0.03 240);
+  --popover-foreground: oklch(0.92 0.01 240);
+  --primary: oklch(0.62 0.14 35);
+  --primary-foreground: oklch(0.12 0.03 240);
+  --secondary: oklch(0.22 0.04 240);
+  --secondary-foreground: oklch(0.88 0.01 240);
+  --muted: oklch(0.20 0.03 240);
+  --muted-foreground: oklch(0.58 0.02 240);
+  --accent: oklch(0.68 0.16 35);
+  --accent-foreground: oklch(0.12 0.03 240);
+  --destructive: oklch(0.58 0.22 10);
+  --destructive-foreground: oklch(0.95 0.01 240);
+  --border: oklch(0.26 0.04 240);
+  --input: oklch(0.24 0.04 240);
+  --ring: oklch(0.68 0.16 35);
+  
+  /* Chart Tokens */
+  --chart-1: oklch(0.62 0.20 180);
+  --chart-2: oklch(0.68 0.16 35);
+  --chart-3: oklch(0.58 0.18 280);
+  --chart-4: oklch(0.65 0.14 140);
+  --chart-5: oklch(0.60 0.20 320);
+  
+  /* Sidebar Tokens */
+  --sidebar: oklch(0.10 0.03 240);
+  --sidebar-foreground: oklch(0.88 0.01 240);
+  --sidebar-primary: oklch(0.68 0.16 35);
+  --sidebar-primary-foreground: oklch(0.10 0.03 240);
+  --sidebar-accent: oklch(0.18 0.04 240);
+  --sidebar-accent-foreground: oklch(0.88 0.01 240);
+  --sidebar-border: oklch(0.22 0.04 240);
+  --sidebar-ring: oklch(0.68 0.16 35);
+}
+
+@theme inline {
+  /* Shadcn Core Mapping */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Charts Mapping */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar Mapping */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Typography */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  /* Radius */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans min-h-screen;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  code, pre {
+    @apply font-mono;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-primary;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/40;
+  }
+}
