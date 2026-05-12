@@ -112,3 +112,5 @@ PYTHONPATH=src .venv/bin/python -c "from translation_radar_api.services.rag_sear
 3. Query the index through `POST /rag/search`.
 
 The repository also ships a small set of real public normalized fixture records in `data/rag/normalized_records.json` so the default index build produces non-seed documents immediately.
+
+For the live demo path, `data/rag/feed_manifest.json` is preloaded with public Technology Publisher RSS feeds for University of Pennsylvania, Emory University, George Washington University, University of Chicago, and University of South Alabama.

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import re
+from urllib.request import urlopen
 
 from translation_radar_api.models import NormalizedTechnologyRecord, RagIndexedDocument
 from translation_radar_api.sources.inteum_rss import parse_inteum_rss_feed
@@ -43,14 +44,25 @@ def load_manifest_catalog_records(feed_manifest_path: Path | None = None) -> lis
         parser = item.get("parser", "inteum_rss")
         if parser != "inteum_rss":
             continue
-        feed_path = Path(item["feed_path"])
-        if not feed_path.is_absolute():
-            feed_path = resolved_path.parent / feed_path
-        if not feed_path.exists():
+
+        feed_xml = ""
+        feed_path_value = item.get("feed_path")
+        if feed_path_value:
+            feed_path = Path(feed_path_value)
+            if not feed_path.is_absolute():
+                feed_path = resolved_path.parent / feed_path
+            if not feed_path.exists():
+                continue
+            feed_xml = feed_path.read_text(encoding="utf-8")
+        elif item.get("feed_url"):
+            with urlopen(item["feed_url"], timeout=30) as response:  # noqa: S310 - manifest-controlled public source fetch
+                feed_xml = response.read().decode("utf-8")
+        else:
             continue
+
         records.extend(
             parse_inteum_rss_feed(
-                feed_xml=feed_path.read_text(encoding="utf-8"),
+                feed_xml=feed_xml,
                 institution_name=item["institution_name"],
                 source_url=item["source_url"],
             )
@@ -63,10 +75,19 @@ def load_catalog_records(
     records_path: Path | None = None,
     feed_manifest_path: Path | None = None,
 ) -> list[NormalizedTechnologyRecord]:
-    return [
-        *load_normalized_catalog_records(records_path),
-        *load_manifest_catalog_records(feed_manifest_path),
-    ]
+    if records_path is not None:
+        normalized_records = load_normalized_catalog_records(records_path)
+        if normalized_records:
+            return normalized_records
+
+    if feed_manifest_path is not None:
+        return load_manifest_catalog_records(feed_manifest_path)
+
+    normalized_records = load_normalized_catalog_records(records_path)
+    if normalized_records:
+        return normalized_records
+
+    return load_manifest_catalog_records(feed_manifest_path)
 
 
 def _slugify(value: str) -> str:

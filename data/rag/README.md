@@ -7,6 +7,14 @@ Files:
 - `normalized_records.json` contains normalized technology records that the default index build can ingest immediately.
 - `feed_manifest.json` defines Inteum RSS feed harvest targets for the first harvester job.
 
+Current live demo feeds:
+
+- University of Pennsylvania
+- Emory University
+- George Washington University
+- University of Chicago
+- University of South Alabama
+
 Build the default normalized dataset from the Inteum RSS manifest with:
 
 ```bash

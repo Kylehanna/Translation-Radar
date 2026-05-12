@@ -1,1 +1,32 @@
-[]
+[
+	{
+		"institution_name": "University of Pennsylvania",
+		"source_url": "https://upenn.technologypublisher.com/",
+		"feed_url": "https://upenn.technologypublisher.com/rss",
+		"parser": "inteum_rss"
+	},
+	{
+		"institution_name": "Emory University",
+		"source_url": "https://emoryott.technologypublisher.com/",
+		"feed_url": "https://emoryott.technologypublisher.com/rss",
+		"parser": "inteum_rss"
+	},
+	{
+		"institution_name": "George Washington University",
+		"source_url": "https://gwu.technologypublisher.com/",
+		"feed_url": "https://gwu.technologypublisher.com/rss",
+		"parser": "inteum_rss"
+	},
+	{
+		"institution_name": "University of Chicago",
+		"source_url": "https://uchicago.technologypublisher.com/",
+		"feed_url": "https://uchicago.technologypublisher.com/rss",
+		"parser": "inteum_rss"
+	},
+	{
+		"institution_name": "University of South Alabama",
+		"source_url": "https://southalabama.technologypublisher.com/",
+		"feed_url": "https://southalabama.technologypublisher.com/rss",
+		"parser": "inteum_rss"
+	}
+]
