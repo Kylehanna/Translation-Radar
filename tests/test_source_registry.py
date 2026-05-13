@@ -74,7 +74,7 @@ class SourceRegistryTests(unittest.TestCase):
         summary = load_autm_2022_coverage_summary()
 
         self.assertGreater(summary.target_institution_count, 100)
-        self.assertEqual(summary.direct_coverage_count, 56)
+        self.assertEqual(summary.direct_coverage_count, 58)
         self.assertFalse(summary.canberra_retired)
 
         upenn_entry = next(entry for entry in summary.entries if entry.institution_name == "University of Pennsylvania")
@@ -154,8 +154,10 @@ class SourceRegistryTests(unittest.TestCase):
             "Fred Hutchinson Cancer Center": "https://www.fredhutch.org/en/investors/business-development/available-technologies.html",
             "Georgia Institute of Technology": "https://licensing.research.gatech.edu/technologies",
             "Icahn School of Medicine at Mount Sinai": "https://ip.mountsinai.org/technologies/",
+            "Jackson State University": "https://www.jsums.edu/technologytransfer/industry/",
             "Michigan State University": "https://msut.technologypublisher.com/",
             "New York University": "https://license.tov.med.nyu.edu/",
+            "North Carolina A&T State University": "https://ncat.edu/research/technology-transfer/available-technologies.php",
             "North Carolina State University": "https://ncsu.portals.in-part.com/",
             "Purdue Research Foundation": "https://licensing.prf.org/",
             "Stanford University": "https://techfinder.stanford.edu/",
@@ -243,7 +245,7 @@ class SourceRegistryTests(unittest.TestCase):
         summary = load_autm_combined_coverage_summary()
 
         self.assertEqual(summary.target_institution_count, 237)
-        self.assertEqual(summary.direct_coverage_count, 63)
+        self.assertEqual(summary.direct_coverage_count, 65)
 
         uab_entry = next(entry for entry in summary.entries if entry.institution_name == "The UAB Research Foundation")
         self.assertEqual(uab_entry.coverage_status, "direct-covered")
@@ -317,11 +319,19 @@ class SourceRegistryTests(unittest.TestCase):
         self.assertEqual(cornell_entry.coverage_status, "direct-covered")
         self.assertEqual(cornell_entry.preferred_url, "https://cornell.flintbox.com/")
 
+        ncat_entry = next(entry for entry in summary.entries if entry.institution_name == "North Carolina A&T State University")
+        self.assertEqual(ncat_entry.coverage_status, "direct-covered")
+        self.assertEqual(ncat_entry.preferred_url, "https://ncat.edu/research/technology-transfer/available-technologies.php")
+
+        jsu_entry = next(entry for entry in summary.entries if entry.institution_name == "Jackson State University")
+        self.assertEqual(jsu_entry.coverage_status, "direct-covered")
+        self.assertEqual(jsu_entry.preferred_url, "https://www.jsums.edu/technologytransfer/industry/")
+
     def test_loads_autm_combined_family_coverage_summary(self) -> None:
         summary = load_autm_combined_family_coverage_summary()
 
         self.assertEqual(summary.coverage_name, "AUTM Combined System-Aware Family Coverage")
-        self.assertEqual(summary.covered_family_count, 54)
+        self.assertEqual(summary.covered_family_count, 56)
 
         uc_family = next(entry for entry in summary.entries if entry.family_key == "university_of_california")
         self.assertEqual(uc_family.coverage_status, "direct-covered")
@@ -393,6 +403,14 @@ class SourceRegistryTests(unittest.TestCase):
 
     def test_resolves_shortlist_public_catalog_overrides(self) -> None:
         expected = {
+            "Howard University": (
+                "https://howard.portals.in-part.com/",
+                "custom_catalog",
+            ),
+            "Jackson State University": (
+                "https://www.jsums.edu/technologytransfer/industry/",
+                "custom_catalog",
+            ),
             "Massachusetts Institute of Technology": (
                 "https://tlo.mit.edu/industry-entrepreneurs/available-technologies",
                 "custom_catalog",
@@ -415,6 +433,14 @@ class SourceRegistryTests(unittest.TestCase):
             ),
             "Carnegie Mellon University": (
                 "http://cmu.flintbox.com/",
+                "custom_catalog",
+            ),
+            "North Carolina A&T State University": (
+                "https://ncat.edu/research/technology-transfer/available-technologies.php",
+                "custom_catalog",
+            ),
+            "Tuskegee University": (
+                "https://www.tuskegee.edu/research-sponsored-programs/Technology-Transfer.html",
                 "custom_catalog",
             ),
             "Columbia University": (
