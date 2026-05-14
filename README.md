@@ -111,6 +111,26 @@ PYTHONPATH=src .venv/bin/python -c "from translation_radar_api.services.rag_sear
 
 3. Query the index through `POST /rag/search`.
 
+## Optional LLM Answer Layer
+
+The retrieval endpoint can also produce an LLM-written answer on top of the retrieved evidence. This is optional and falls back to the heuristic answer if the model is not configured or the request fails.
+
+Set these environment variables before starting the API:
+
+```bash
+export TRANSLATION_RADAR_RAG_LLM_API_URL="http://127.0.0.1:11434/v1/chat/completions"
+export TRANSLATION_RADAR_RAG_LLM_MODEL="llama3.1"
+export TRANSLATION_RADAR_RAG_LLM_API_KEY=""
+```
+
+The endpoint remains the same: `POST /rag/search`. When `include_answer=true`, the backend will now:
+
+1. retrieve ranked technology matches from the local index
+2. pass the top evidence chunks to the configured chat-completions endpoint
+3. return the generated answer with the model name in the `answer.model` field
+
+If you do not want LLM generation, leave those variables unset and the API will keep returning the current heuristic answer.
+
 The repository also ships a small set of real public normalized fixture records in `data/rag/normalized_records.json` so the default index build produces non-seed documents immediately.
 
 For the live demo path, `data/rag/feed_manifest.json` is preloaded with public Technology Publisher RSS feeds for University of Pennsylvania, Emory University, George Washington University, University of Chicago, and University of South Alabama.

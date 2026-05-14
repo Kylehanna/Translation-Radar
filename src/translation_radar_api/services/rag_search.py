@@ -20,6 +20,7 @@ from translation_radar_api.models import (
     RagTechnologyDetail,
     RagTechnologyResult,
 )
+from translation_radar_api.services.rag_answer import build_rag_answer
 from translation_radar_api.services.rag_index import (
     get_rag_index_status,
     load_rag_index_snapshot,
@@ -269,22 +270,7 @@ def search_seed_technology_records(payload: RagSearchRequest, index_path: Path |
 
     answer = None
     if payload.include_answer:
-        if top_results:
-            org_names = sorted({result.organization_name for result in top_results})
-            answer = RagAnswer(
-                summary=(
-                    f"Found {len(top_results)} seeded technology matches for '{payload.query}' across "
-                    f"{', '.join(org_names)}. Results are ranked with lightweight keyword overlap and include direct-source evidence."
-                ),
-                generated_at=date.today(),
-            )
-        else:
-            answer = RagAnswer(
-                summary=(
-                    f"No seeded technology records matched '{payload.query}'. Adjust filters or ingest more catalog records before relying on RAG retrieval."
-                ),
-                generated_at=date.today(),
-            )
+        answer = build_rag_answer(payload.query, top_results)
 
     return RagSearchResponse(
         query=payload.query,

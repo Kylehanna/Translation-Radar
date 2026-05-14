@@ -2,8 +2,10 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import json
+from unittest.mock import patch
 
 from translation_radar_api.models import NormalizedTechnologyRecord, RagSearchFilters, RagSearchRequest
+from translation_radar_api.services import rag_answer
 from translation_radar_api.services.rag_search import (
     build_rag_coverage_status,
     build_seed_rag_index,
@@ -23,6 +25,29 @@ class RagSearchTests(unittest.TestCase):
         self.assertEqual(response.query, "oncology diagnostics")
         self.assertTrue(response.results)
         self.assertEqual(response.results[0].organization_name, "Icahn School of Medicine at Mount Sinai")
+        self.assertIn("direct-source evidence", response.answer.summary)
+        self.assertEqual(response.answer.model, "heuristic-retrieval-v1")
+
+    def test_search_can_generate_llm_answer(self) -> None:
+        with patch.object(rag_answer.settings, "rag_llm_api_url", "http://llm.example/v1/chat/completions"), patch.object(
+            rag_answer.settings, "rag_llm_model", "gpt-test"
+        ), patch.object(rag_answer, "_call_openai_compatible_chat", return_value="Grounded answer from LLM"):
+            response = search_seed_technology_records(
+                RagSearchRequest(query="oncology diagnostics", top_k=5)
+            )
+
+        self.assertEqual(response.answer.summary, "Grounded answer from LLM")
+        self.assertEqual(response.answer.model, "gpt-test")
+
+    def test_search_falls_back_when_llm_call_fails(self) -> None:
+        with patch.object(rag_answer.settings, "rag_llm_api_url", "http://llm.example/v1/chat/completions"), patch.object(
+            rag_answer.settings, "rag_llm_model", "gpt-test"
+        ), patch.object(rag_answer, "_call_openai_compatible_chat", side_effect=RuntimeError("boom")):
+            response = search_seed_technology_records(
+                RagSearchRequest(query="oncology diagnostics", top_k=5)
+            )
+
+        self.assertEqual(response.answer.model, "heuristic-retrieval-v1")
         self.assertIn("direct-source evidence", response.answer.summary)
 
     def test_search_applies_filters(self) -> None:
@@ -46,7 +71,7 @@ class RagSearchTests(unittest.TestCase):
     def test_builds_coverage_status(self) -> None:
         coverage = build_rag_coverage_status()
 
-        self.assertEqual(coverage.direct_covered_count, 63)
+        self.assertEqual(coverage.direct_covered_count, 65)
         self.assertEqual(coverage.target_count, 237)
         self.assertEqual(coverage.snapshot_record_count, 5)
 
