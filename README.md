@@ -89,9 +89,16 @@ Then open `http://127.0.0.1:8000/docs`.
 - `POST /alerts/scout-signals` ranks researcher-linked scout signals
 - `POST /sources/normalize/inteum-rss` normalizes Inteum-style RSS feeds into the common technology schema
 - `GET /sources/registry/technologypublisher` returns the tracked Technology Publisher host inventory and rough active-count estimate
+- `GET /sources/registry/technologypublisher.csv` returns the Technology Publisher registry as CSV
+- `GET /sources/registry/campus-families.csv` returns the campus family registry as CSV
+- `GET /sources/registry/catalog-families.csv` returns the catalog family registry as CSV
+- `GET /sources/coverage/autm-2022.csv` returns AUTM 2022 institution coverage as CSV
+- `GET /sources/coverage/autm-2018.csv` returns AUTM 2018 institution coverage as CSV
 - `POST /rag/search` returns ranked technology matches from the current index snapshot or fallback seed corpus
 - `POST /rag/index/build` writes the current RAG index snapshot
 - `GET /rag/index/status` reports whether the current index snapshot exists
+
+These CSV endpoints are intended for spreadsheet work and exploratory data analysis over TTO source coverage without needing a separate export step.
 
 ## Current RAG Build Flow
 

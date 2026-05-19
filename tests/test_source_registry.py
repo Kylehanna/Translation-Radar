@@ -1,7 +1,14 @@
+import csv
+from io import StringIO
 import unittest
 
 from translation_radar_api.models import PreferredCatalogRequest
-from translation_radar_api.routes.sources import build_preferred_catalog_response
+from translation_radar_api.routes.sources import (
+    autm_2022_coverage_csv,
+    build_preferred_catalog_response,
+    campus_family_registry_csv,
+    technology_publisher_registry_csv,
+)
 from translation_radar_api.sources.registry import (
     load_autm_combined_coverage_summary,
     load_autm_combined_family_coverage_summary,
@@ -14,6 +21,44 @@ from translation_radar_api.sources.registry import (
 
 
 class SourceRegistryTests(unittest.TestCase):
+    def test_technology_publisher_registry_csv_export(self) -> None:
+        response = technology_publisher_registry_csv()
+        body = response.body.decode("utf-8")
+        rows = list(csv.DictReader(StringIO(body)))
+
+        self.assertEqual(response.media_type, "text/csv")
+        self.assertIn('attachment; filename="technologypublisher_registry.csv"', response.headers["content-disposition"])
+        self.assertEqual(len(rows), 42)
+        upenn_entry = next(row for row in rows if row["host"] == "upenn.technologypublisher.com")
+        self.assertEqual(upenn_entry["preferred_url"], "https://upenn.technologypublisher.com/site/search")
+        self.assertEqual(upenn_entry["access_status"], "verified-direct")
+
+    def test_campus_family_registry_csv_export(self) -> None:
+        response = campus_family_registry_csv()
+        body = response.body.decode("utf-8")
+        rows = list(csv.DictReader(StringIO(body)))
+
+        self.assertEqual(response.media_type, "text/csv")
+        self.assertIn('attachment; filename="campus_family_registry.csv"', response.headers["content-disposition"])
+        ut_dallas_entry = next(
+            row for row in rows if row["member_institution_name"] == "University of Texas at Dallas"
+        )
+        self.assertEqual(ut_dallas_entry["preferred_url"], "https://utdallas.technologypublisher.com/site/search")
+
+    def test_autm_2022_coverage_csv_export(self) -> None:
+        response = autm_2022_coverage_csv()
+        body = response.body.decode("utf-8")
+        rows = list(csv.DictReader(StringIO(body)))
+
+        self.assertEqual(response.media_type, "text/csv")
+        self.assertIn('attachment; filename="autm_2022_coverage.csv"', response.headers["content-disposition"])
+        harvard_entry = next(row for row in rows if row["institution_name"] == "Harvard University")
+        self.assertEqual(harvard_entry["coverage_status"], "direct-covered")
+        self.assertEqual(
+            harvard_entry["preferred_url"],
+            "https://otd.harvard.edu/industry-investors/commercialization-opportunities/",
+        )
+
     def test_loads_technology_publisher_registry(self) -> None:
         summary = load_technology_publisher_registry()
 
